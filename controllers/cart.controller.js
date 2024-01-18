@@ -20,8 +20,6 @@ class Cart {
         try {
             const payload = req.body;
             const existingCart = await cartModel.findOne({user_id:payload.user_id})
-            // console.log(existingCart.products[0].item)
-            // console.log(payload.products.item)
             if(!existingCart){
                 const data = await cartModel.create(payload);
                 res.status(200).json({
@@ -48,6 +46,24 @@ class Cart {
                     });
                 }
             }
+        } catch (error) {
+            res.status(400).json({
+                error: error.message,
+            });
+        }
+    }
+    async deleteCart(req,res){
+        try {
+            const payload = req.body
+            console.log(payload)
+            const response = await cartModel.findOne({user_id : payload.user_id})
+            response.products.id(payload.item).deleteOne()
+            await response.save()
+            const data = await cartModel.find({ user_id : payload.user_id }).populate('products.item')
+            res.json({
+                message : "SUCCESS",
+                data : data
+            })
         } catch (error) {
             res.status(400).json({
                 error: error.message,
