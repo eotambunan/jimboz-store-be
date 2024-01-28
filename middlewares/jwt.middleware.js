@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const jwk = "password"
 
 const createToken = (payload)=>{
+    console.log(payload)
     const data = {
         id : payload._id,
         name : payload.name
